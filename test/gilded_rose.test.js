@@ -36,3 +36,44 @@ describe("Gilded Rose - Normal Items", function() {
     expect(items[0].quality).toBe(5);
   })
 });
+
+describe("Gilded Rose - Aged Brie", function() {
+  it("Quality increase by one per day", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", 4, 8)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(3);
+    expect(items[0].quality).toBe(9);
+  });
+
+  it("Quality increase by one per day", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", 1, 49)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(0);
+    expect(items[0].quality).toBe(50);
+  });
+
+  it("Expired items quality increase by 2", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", -1, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-2);
+    expect(items[0].quality).toBe(12);
+  });
+
+  it("Items quality never exceeds 50", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", 5, 50)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(50);
+  });
+
+  it("Expired items quality never exceeds 50", function() {
+    const gildedRose = new Shop([new Item("Aged Brie", -3, 49)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-4);
+    expect(items[0].quality).toBe(50);
+  });
+
+});
+
+
+
