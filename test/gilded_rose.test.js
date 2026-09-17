@@ -98,3 +98,77 @@ describe("Gilded Rose - Sulfuras", function() {
     expect(items[0].quality).toBe(80);
   });
 });
+
+
+describe("Gilded Rose - Backstage passes", function() {
+  it("Quality increases by 1 with days > 10", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(14);
+    expect(items[0].quality).toBe(21);
+  });
+
+  it("Quality increases by 1 with days > 10", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 11, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(10);
+    expect(items[0].quality).toBe(21);
+  });
+
+  it("Quality increases by 2 with days <= 10", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 10, 25)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(9);
+    expect(items[0].quality).toBe(27);
+  });
+
+  it("Quality increases by 2 with days <= 10", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 6, 25)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(5);
+    expect(items[0].quality).toBe(27);
+  });
+
+  it("Quality increases by 3 with days <= 5", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(23);
+  });
+
+  it("Quality drops to 0 after concert", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 0, 40)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(0);
+  });
+
+  it("Already expired backstage pass has 0 quality", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", -5, 40)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-6);
+    expect(items[0].quality).toBe(0);
+
+  });
+
+  it("Quality never exceeds 50 when <=5 days", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 3, 49)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(2);
+    expect(items[0].quality).toBe(50);
+  });
+
+  it("Quality never exceeds 50 when <=10 days", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(9);
+    expect(items[0].quality).toBe(50);
+  });
+
+  it("Quality never exceeds 50 when >10days", function() {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 12, 50)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(11);
+    expect(items[0].quality).toBe(50);
+  });  
+});
