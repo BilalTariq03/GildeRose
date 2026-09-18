@@ -172,3 +172,41 @@ describe("Gilded Rose - Backstage passes", function() {
     expect(items[0].quality).toBe(50);
   });  
 });
+
+
+describe("Gilded Rose - Conjured Items", function() {
+  it("Quality decreases by 2 per day", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 5, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(8);
+  });
+
+  it("Expired item's quality decreases by 4", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 0, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(6);
+  });
+
+  it("Already expired item's quality decreases by 4", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", -3, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-4);
+    expect(items[0].quality).toBe(6);
+  });
+
+  it("Quality never goes below 0", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 5, 0)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(0);
+  });
+
+  it("Expired quality never goes below 0", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 0, 2)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(0);
+  });
+});
